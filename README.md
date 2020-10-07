@@ -6,6 +6,8 @@ You only need to specify the flags(`u`, `o`, `c`) to run, downloader will automa
 
 [中文说明](README_zh-CN.md)
 
+- 파라미터를 추가하도록 수정했습니다.
+
 ## Features
 
 - Download and parse M3U8（VOD）
