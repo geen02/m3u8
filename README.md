@@ -6,7 +6,7 @@ You only need to specify the flags(`u`, `o`, `c`) to run, downloader will automa
 
 [中文说明](README_zh-CN.md)
 
-- 파라미터를 추가하도록 수정했습니다.
+- ts 다운로드 url에 파라미터를 추가하도록 수정했습니다.
 
 ## Features
 
