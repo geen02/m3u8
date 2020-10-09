@@ -10,8 +10,8 @@ import (
 	"sync"
 	"sync/atomic"
 
-	"github.com/oopsguy/m3u8/parse"
-	"github.com/oopsguy/m3u8/tool"
+	"../parse"
+	"../tool"
 )
 
 const (
@@ -39,6 +39,12 @@ func NewTask(output string, url string) (*Downloader, error) {
 	if err != nil {
 		return nil, err
 	}
+	//fmt.Println(result.URL)
+	//fmt.Println(result.M3u8)
+	//fmt.Println(len(result.M3u8.Segments))
+	//fmt.Println(result.M3u8.Segments[0])
+	//fmt.Println(result.Keys)
+	//return nil, nil
 	var folder string
 	// If no output folder specified, use current directory
 	if output == "" {
@@ -106,6 +112,8 @@ func (d *Downloader) download(segIndex int) error {
 	tsUrl := d.tsURL(segIndex)
 	b, e := tool.Get(tsUrl)
 	if e != nil {
+		//fmt.Println(tsUrl)
+		//panic(1)
 		return fmt.Errorf("request %s, %s", tsUrl, e.Error())
 	}
 	//noinspection GoUnhandledErrorResult
@@ -238,6 +246,11 @@ func (d *Downloader) merge() error {
 
 func (d *Downloader) tsURL(segIndex int) string {
 	seg := d.result.M3u8.Segments[segIndex]
+	//fmt.Println("seg: ", seg)
+	//fmt.Println("d.result.URL: ", d.result.URL)
+	//fmt.Println("seg.URI: ", seg.URI)
+	//fmt.Println("tool.ResolveURL(d.result.URL, seg.URI): ", tool.ResolveURL(d.result.URL, seg.URI))
+	//panic(0)
 	return tool.ResolveURL(d.result.URL, seg.URI)
 }
 
