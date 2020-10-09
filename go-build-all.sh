@@ -43,8 +43,10 @@ PLATFORMS_ALL=`go tool dist list` # all of possible platfom
 # done
 notArm=`echo "$PLATFORMS_ALL" | sed -e 's/^.*\/arm$//g'`
 arm=`echo "$PLATFORMS_ALL" | sed -n '/arm$/p' | sed -e 's/\/arm$//g'`
-PLATFROMS="${notArm}"
+PLATFORMS="${notArm}"
 PLATFORMS_ARM="${arm}"
+echo "PLATFORMS: ${PLATFORMS}"
+echo "PLATFORMS_ARM: ${PLATFORMS_ARM}"
 
 # PLATFORMS="darwin/amd64" # amd64 only as of go1.5
 # PLATFORMS="$PLATFORMS windows/amd64 windows/386" # arm compilation not available for Windows
@@ -122,4 +124,3 @@ if [[ "${FAILURES}" != "" ]]; then
   echo "${SCRIPT_NAME} failed on: ${FAILURES}"
   exit 1
 fi
-
