@@ -25,18 +25,27 @@ func ResolveURL(u *url.URL, p string) string {
 		return p
 	}
 	var baseURL string
-	tU := u.String()
+	url_string := u.String()
 	if strings.Index(p, "/") == 0 {
 		baseURL = u.Scheme + "://" + u.Host
 	} else {
-		baseURL = tU[0:strings.LastIndex(tU, "/")]
+		baseURL = url_string[0:strings.LastIndex(url_string, "/")]
 	}
-	idx := strings.LastIndex(tU, "?")
+	
+	idx := strings.LastIndex(url_string, "?")
 	if idx == -1 {
-		return baseURL + path.Join("/", p)
+		return baseURL + "/" + p
 	} else {
-		return baseURL + path.Join("/", p) + tU[idx:]
+		parameter := url_string[idx + 1:]
+		if strings.LastIndex(p, "?") == -1 {
+			return baseURL + "/" + p + "?" + parameter
+		} else {
+			return baseURL + "/" + p + "&" + parameter
+		}
 	}
+	// baseURL/p (not include parameter)
+	// baseURL/p?parameter (include parameter if p not contain ?)
+	// baseURL/p&parameter (include parameter if p contain ?)
 }
 
 func DrawProgressBar(prefix string, proportion float32, width int, suffix ...string) {
