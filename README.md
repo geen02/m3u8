@@ -7,6 +7,7 @@ You only need to specify the flags(`u`, `o`, `c`) to run, downloader will automa
 [中文说明](README_zh-CN.md)
 
 - ts 다운로드 url에 파라미터를 추가하도록 수정했습니다.
+- `Release 1.2.3`에서 `go1.18.4`에서 빌드할 수 있게 수정했습니다. 윈도우에서 빌드하려면 `go-build-all.sh`에서 변수 `window_bash`를 유심히 보시길 바랍니다.
 
 ## Features
 
