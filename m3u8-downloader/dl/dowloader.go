@@ -10,8 +10,8 @@ import (
 	"sync"
 	"sync/atomic"
 
-	"../parse"
-	"../tool"
+	"m3u8-downloader/parse"
+	"m3u8-downloader/tool"
 )
 
 const (

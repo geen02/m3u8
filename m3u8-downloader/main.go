@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 
-	"./dl"
+	"m3u8-downloader/dl"
 )
 
 var (

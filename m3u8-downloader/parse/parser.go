@@ -6,7 +6,7 @@ import (
 	"io/ioutil"
 	"net/url"
 
-	"../tool"
+	"m3u8-downloader/tool"
 )
 
 type Result struct {
