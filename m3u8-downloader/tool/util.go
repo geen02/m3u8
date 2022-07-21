@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"net/url"
 	"os"
-	"path"
 	"path/filepath"
 	"strings"
 )
@@ -30,22 +29,24 @@ func ResolveURL(u *url.URL, p string) string {
 		baseURL = u.Scheme + "://" + u.Host
 	} else {
 		baseURL = url_string[0:strings.LastIndex(url_string, "/")]
+		p = "/" + p
 	}
-	
+
 	idx := strings.LastIndex(url_string, "?")
 	if idx == -1 {
-		return baseURL + "/" + p
+		return baseURL + p
 	} else {
-		parameter := url_string[idx + 1:]
+		parameter := url_string[idx+1:]
 		if strings.LastIndex(p, "?") == -1 {
-			return baseURL + "/" + p + "?" + parameter
+			return baseURL + p + "?" + parameter
 		} else {
-			return baseURL + "/" + p + "&" + parameter
+			return baseURL + p + "&" + parameter
 		}
 	}
-	// baseURL/p (not include parameter)
-	// baseURL/p?parameter (include parameter if p not contain ?)
-	// baseURL/p&parameter (include parameter if p contain ?)
+	// baseURL + p (not include parameter)
+	// baseURL + p?parameter (include parameter if p not contain ?)
+	// baseURL + p&parameter (include parameter if p contain ?)
+	/// 'p' starts with "/"
 }
 
 func DrawProgressBar(prefix string, proportion float32, width int, suffix ...string) {
