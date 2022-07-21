@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 #
 # GoLang cross-compile snippet for Go 1.6+ based loosely on Dave Chaney's cross-compile script:
 # http://dave.cheney.net/2012/09/08/an-introduction-to-cross-compilation-with-go
@@ -37,6 +37,12 @@
 #
 # go tool dist list
 #
+
+window_bash=0 # 1 true, 0 false
+
+if [ ${window_bash} -eq 1 ]; then
+  alias go='go.exe'
+fi
 PLATFORMS_ALL=`go tool dist list` # all of possible platfom
 # for i in `echo "$PLATFORMS" | sed -e 's/^.*\/arm$//g'`; do
   # notArm="${notArm} ${i}"
@@ -77,6 +83,27 @@ echo "PLATFORMS_ARM: ${PLATFORMS_ARM}"
 
 # PLATFORMS_ARM="linux freebsd netbsd"
 
+GOPATH=`go env GOPATH`
+module_name="m3u8-downloader"
+execute_dir="${PWD}"
+
+if [ ${window_bash} -eq 1 ]; then
+  user="user"
+  GOPATH="/mnt/c/Users/${user}/go"
+fi
+if [ ! -d "${module_name}" ]; then
+  echo "source module directory does not exist: ./${module_name}/, ${execute_dir}/${module_name}/"
+  exit
+fi
+if [ ! -d "${GOPATH}" ]; then
+  echo "GOPATH directory does not exist: ${GOPATH}/"
+  exit
+fi
+mkdir -p "${GOPATH}/src/"
+cp -rf "${module_name}" "${GOPATH}/src/"
+cd "${GOPATH}/src/${module_name}"
+
+# BINARY_DIR="${execute_dir}/binary_dir/"
 BINARY_DIR="binary_dir/"
 
 ##############################################################
@@ -95,7 +122,7 @@ for PLATFORM in $PLATFORMS; do
   GOOS=${PLATFORM%/*}
   GOARCH=${PLATFORM#*/}
   BIN_FILENAME="${OUTPUT}-${GOOS}-${GOARCH}"
-  if [[ "${GOOS}" == "windows" ]]; then BIN_FILENAME="${BIN_FILENAME}.exe"; fi
+  if [ "${GOOS}" = "windows" ]; then BIN_FILENAME="${BIN_FILENAME}.exe"; fi
   CMD="GOOS=${GOOS} GOARCH=${GOARCH} go build -o ${BINARY_DIR}${BIN_FILENAME} $@"
   echo "${CMD}"
   eval $CMD || FAILURES="${FAILURES} ${PLATFORM}"
@@ -112,14 +139,17 @@ for GOOS in $PLATFORMS_ARM; do
   # build for each ARM version
   for GOARM in 7 6 5; do
     BIN_FILENAME="${OUTPUT}-${GOOS}-${GOARCH}${GOARM}"
+    if [ "${GOOS}" = "windows" ]; then BIN_FILENAME="${BIN_FILENAME}.exe"; fi
     CMD="GOARM=${GOARM} GOOS=${GOOS} GOARCH=${GOARCH} go build -o ${BINARY_DIR}${BIN_FILENAME} $@"
     echo "${CMD}"
     eval "${CMD}" || FAILURES="${FAILURES} ${GOOS}/${GOARCH}${GOARM}" 
   done
 done
 
+mv "${BINARY_DIR}" "${execute_dir}"
+
 # eval errors
-if [[ "${FAILURES}" != "" ]]; then
+if [ "${FAILURES}" = "" ]; then
   echo ""
   echo "${SCRIPT_NAME} failed on: ${FAILURES}"
   exit 1
